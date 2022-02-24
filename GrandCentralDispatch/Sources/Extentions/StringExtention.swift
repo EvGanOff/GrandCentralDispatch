@@ -20,4 +20,19 @@ extension String {
         stringArray[index] = character
         self = String(stringArray)
     }
+    
+    // Разделяет строку на подстроки заданной длины.
+    func components(withMaxLength length: Int) -> [String] {
+        return stride(from: 0, to: self.count, by: length).map {
+            let start = self.index(self.startIndex, offsetBy: $0)
+            let end = self.index(start, offsetBy: length, limitedBy: self.endIndex) ?? self.endIndex
+            return String(self[start..<end])
+        }
+    }
+
+    // Mметод генерирует рандомные знаки в текстфилде
+    static func generateRandom(long: Int) -> String {
+        let characters = String().printable
+        return String((0..<long).compactMap { _ in characters.randomElement() })
+    }
 }
