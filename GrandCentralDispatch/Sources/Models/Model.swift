@@ -7,9 +7,5 @@
 
 import Foundation
 
-enum Status {
-    case start
-    case process
-    case finished
-}
+
 
