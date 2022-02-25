@@ -7,21 +7,7 @@
 
 import Foundation
 
-class GenerateBruteForceOperation: Operation {
-
-    private var password: String
-
-    init(password: String) {
-        self.password = password
-    }
-
-    override func main() {
-        super.main()
-        if isCancelled {
-            return
-        }
-        bruteForce(passwordToUnlock: password)
-    }
+class GenerateBruteForceOperation {
 
     // Сравнивает заданный пароль со сгенерированной строкой. Если сгенерированная строка совпадает с заданным паролем, метод выводит сгенерированную строку в консоль.
     func bruteForce(passwordToUnlock: String) {
