@@ -10,9 +10,9 @@ import UIKit
 class ViewController: UIViewController {
 
    // MARK: - Properties
-    var onboardingView: SettingsView? {
+    var onboardingBrutView: BruteView? {
         guard isViewLoaded else { return nil }
-        return view as? SettingsView
+        return view as? BruteView
     }
 
     var brute = GenerateBruteForceOperation()
@@ -20,9 +20,9 @@ class ViewController: UIViewController {
     // MARK: - Сomputed properties
     private var isBlack: Bool = true {
         didSet {
-            onboardingView?.backgroundColor = isBlack ? .white : .black
-            onboardingView?.infoLabel.textColor = isBlack ? .black : .white
-            onboardingView?.buttonColorReplacement.backgroundColor = isBlack ? .systemOrange : .systemPink
+            onboardingBrutView?.backgroundColor = isBlack ? .white : .black
+            onboardingBrutView?.infoLabel.textColor = isBlack ? .black : .white
+            onboardingBrutView?.buttonColorReplacement.backgroundColor = isBlack ? .systemOrange : .systemPink
         }
     }
 
@@ -30,10 +30,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view = SettingsView()
+        view = BruteView()
         statusChange(for: .start)
-        onboardingView?.changeStatusButton.addTarget(self, action: #selector(tapButton), for: .touchUpInside)
-        onboardingView?.buttonColorReplacement.addTarget(self, action: #selector(tapButtonColorChange), for: .touchUpInside)
+        onboardingBrutView?.changeStatusButton.addTarget(self, action: #selector(tapButton), for: .touchUpInside)
+        onboardingBrutView?.buttonColorReplacement.addTarget(self, action: #selector(tapButtonColorChange), for: .touchUpInside)
     }
 }
 
@@ -42,11 +42,13 @@ extension ViewController {
     // MARK: - Action object changes
     @objc func tapButton() {
         statusChange(for: .progress)
-        let unlockPassword = String().generatePassword()
-        onboardingView?.textField.text = unlockPassword
+        onboardingBrutView?.textField.text = String().generatePassword()
+        let unlockPassword = onboardingBrutView?.textField.text?.components(withMaxLength: 3) ?? [""]
         let queue = DispatchQueue(label: "MyBruteForce", qos: .default, attributes: .concurrent)
         let bruteForce = DispatchWorkItem { [self] in
-            brute.bruteForce(passwordToUnlock: unlockPassword)
+            for character in unlockPassword {
+                brute.bruteForce(passwordToUnlock: character)
+            }
         }
 
         bruteForce.notify(queue: .main) { [self] in
@@ -63,25 +65,25 @@ extension ViewController {
     func statusChange(for value: Status) {
         switch value {
         case .start:
-            onboardingView?.infoLabel.text = "Произвести взлом?"
-            onboardingView?.changeStatusButton.setTitle("Взлом", for: .normal)
+            onboardingBrutView?.infoLabel.text = "Произвести взлом?"
+            onboardingBrutView?.changeStatusButton.setTitle("Взлом", for: .normal)
         case .progress:
-            onboardingView?.infoLabel.text = "Выполняется взлом. Это не займет много времени..."
-            onboardingView?.activityIndicator.isHidden = false
-            onboardingView?.activityIndicator.startAnimating()
-            onboardingView?.textField.isSecureTextEntry = true
-            onboardingView?.buttonColorReplacement.isHidden = false
-            onboardingView?.changeStatusButton.isUserInteractionEnabled = false
-            onboardingView?.changeStatusButton.setTitle("Взламываю...", for: .normal)
+            onboardingBrutView?.infoLabel.text = "Выполняется взлом. Это не займет много времени..."
+            onboardingBrutView?.activityIndicator.isHidden = false
+            onboardingBrutView?.activityIndicator.startAnimating()
+            onboardingBrutView?.textField.isSecureTextEntry = true
+            onboardingBrutView?.buttonColorReplacement.isHidden = false
+            onboardingBrutView?.changeStatusButton.isUserInteractionEnabled = false
+            onboardingBrutView?.changeStatusButton.setTitle("Взламываю...", for: .normal)
         case .finish:
-            onboardingView?.activityIndicator.isHidden = true
-            onboardingView?.activityIndicator.stopAnimating()
-            onboardingView?.textField.isSecureTextEntry = false
-            onboardingView?.infoLabel.text = "Пароль \(self.onboardingView?.textField.text ?? "")"
-            onboardingView?.changeStatusButton.isSelected = false
-            onboardingView?.buttonColorReplacement.isHidden = true
-            onboardingView?.changeStatusButton.isUserInteractionEnabled = true
-            onboardingView?.changeStatusButton.setTitle("Повтор", for: .normal)
+            onboardingBrutView?.activityIndicator.isHidden = true
+            onboardingBrutView?.activityIndicator.stopAnimating()
+            onboardingBrutView?.textField.isSecureTextEntry = false
+            onboardingBrutView?.infoLabel.text = "Пароль \(self.onboardingBrutView?.textField.text ?? "")"
+            onboardingBrutView?.changeStatusButton.isSelected = false
+            onboardingBrutView?.buttonColorReplacement.isHidden = true
+            onboardingBrutView?.changeStatusButton.isUserInteractionEnabled = true
+            onboardingBrutView?.changeStatusButton.setTitle("Повтор", for: .normal)
         }
     }
 }
