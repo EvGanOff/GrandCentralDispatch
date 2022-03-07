@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class SettingsView: UIView {
+class BruteView: UIView {
 
     // MARK: - Properties
     var stackView: UIStackView = {

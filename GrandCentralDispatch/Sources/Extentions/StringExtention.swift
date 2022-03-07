@@ -24,9 +24,17 @@ extension String {
     func generatePassword() -> String {
         lazy var password = ""
         let characters = String().printable.map { String($0) }
-        for _ in 0..<3 {
+        for _ in 0..<10 {
             password += characters.randomElement() ?? ""
         }
         return password
+    }
+
+    func components(withMaxLength length: Int) -> [String] {
+        return stride(from: 0, to: self.count, by: length).map {
+            let start = self.index(self.startIndex, offsetBy: $0)
+            let end = self.index(start, offsetBy: length, limitedBy: self.endIndex) ?? self.endIndex
+            return String(self[start..<end])
+        }
     }
 }
