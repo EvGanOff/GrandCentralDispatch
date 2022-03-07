@@ -32,7 +32,7 @@ class SettingsView: UIView {
 
     var textField: UITextField = {
         let textField = UITextField()
-        textField.backgroundColor = .systemGray6
+        textField.backgroundColor = .systemGray
         textField.layer.cornerRadius = ViewConstants.textFieldLayerCornerRadius
         textField.isSecureTextEntry = true
         return textField

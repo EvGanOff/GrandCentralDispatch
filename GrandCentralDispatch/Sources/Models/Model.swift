@@ -7,5 +7,9 @@
 
 import Foundation
 
-
+enum Status {
+    case start
+    case progress
+    case finish
+}
 
